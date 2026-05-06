@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>أبطال البيانات | Data Heroes</title>
+  <meta name="description" content="UAE National Data Academy — An interactive educational game about Data Classification, Privacy, AI Ethics, and Cybersecurity." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="cyber-grid"></div>
+  <canvas id="particles"></canvas>
+
+  <!-- ===== LANDING SCREEN ===== -->
+  <div id="screen-landing" class="screen active">
+    <div class="logo-zone">
+      <div class="hexagon-badge">🛡️</div>
+      <div class="logo-ar">أبطال البيانات</div>
+      <div class="logo-en">DATA HEROES</div>
+      <div class="logo-tagline">UAE National Data Academy — اكاديمية البيانات الوطنية</div>
+    </div>
+
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">English</button>
+      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">عربي</button>
+    </div>
+
+    <p class="section-header" id="select-hero-label">SELECT YOUR HERO</p>
+    <div class="hero-cards-grid">
+      <div class="hero-card" onclick="selectHero(0,this)">
+        <div class="hero-avatar">🛡️</div>
+        <div class="hero-name" data-en="Data Guardian" data-ar="حارس البيانات">Data Guardian</div>
+        <div class="hero-power" data-en="Classification Master" data-ar="خبير التصنيف">Classification Master</div>
+        <span class="hero-badge">+15% Score</span>
+      </div>
+      <div class="hero-card" onclick="selectHero(1,this)">
+        <div class="hero-avatar">🔒</div>
+        <div class="hero-name" data-en="Privacy Defender" data-ar="مدافع الخصوصية">Privacy Defender</div>
+        <div class="hero-power" data-en="Privacy Expert" data-ar="خبير الخصوصية">Privacy Expert</div>
+        <span class="hero-badge">+20% Privacy XP</span>
+      </div>
+      <div class="hero-card" onclick="selectHero(2,this)">
+        <div class="hero-avatar">🤖</div>
+        <div class="hero-name" data-en="AI Detective" data-ar="محقق الذكاء الاصطناعي">AI Detective</div>
+        <div class="hero-power" data-en="AI Awareness Pro" data-ar="محترف التوعية">AI Awareness Pro</div>
+        <span class="hero-badge">+25% AI XP</span>
+      </div>
+      <div class="hero-card" onclick="selectHero(3,this)">
+        <div class="hero-avatar">⭐</div>
+        <div class="hero-name" data-en="Quality Master" data-ar="سيد الجودة">Quality Master</div>
+        <div class="hero-power" data-en="Data Quality Expert" data-ar="خبير جودة البيانات">Data Quality Expert</div>
+        <span class="hero-badge">+20% Quality XP</span>
+      </div>
+      <div class="hero-card" onclick="selectHero(4,this)">
+        <div class="hero-avatar">⚡</div>
+        <div class="hero-name" data-en="Integration Hero" data-ar="بطل التكامل">Integration Hero</div>
+        <div class="hero-power" data-en="Data Sharing Pro" data-ar="خبير مشاركة البيانات">Data Sharing Pro</div>
+        <span class="hero-badge">+15% Sharing XP</span>
+      </div>
+    </div>
+
+    <button class="cta-btn" id="start-btn" onclick="startGame()" disabled>BEGIN YOUR MISSION</button>
+    <p class="tagline-sub" data-en="Protecting UAE's digital future, one decision at a time" data-ar="حماية المستقبل الرقمي للإمارات">
+      Protecting UAE's digital future, one decision at a time
+    </p>
+  </div>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="screen-dashboard" class="screen">
+    <div class="hud-bar">
+      <div class="hud-left">
+        <span class="hud-hero-mini" id="hud-avatar">🛡️</span>
+        <div>
+          <div class="hud-hero-name" id="hud-name">Data Guardian</div>
+          <div class="hud-level">Level <span id="hud-level">1</span></div>
+        </div>
+      </div>
+      <div class="hud-stats">
+        <div class="stat-item"><div class="stat-val" id="hud-xp">0</div><div class="stat-lbl">XP</div></div>
+        <div class="stat-item"><div class="stat-val" id="hud-coins">50</div><div class="stat-lbl" data-en="Coins" data-ar="عملات">Coins</div></div>
+        <div class="stat-item"><div class="stat-val" id="hud-streak">🔥1</div><div class="stat-lbl" data-en="Streak" data-ar="سلسلة">Streak</div></div>
+      </div>
+    </div>
+    <div class="screen-content">
+      <div class="daily-strip">
+        <div><span class="streak-num">🔥 1</span><div class="streak-lbl" data-en="Day Streak" data-ar="أيام متتالية">Day Streak</div></div>
+        <div class="daily-missions">
+          <div class="dm-dot done"></div><div class="dm-dot"></div><div class="dm-dot"></div><div class="dm-dot"></div>
+        </div>
+        <div style="text-align:right">
+          <div class="daily-label" data-en="Daily Missions" data-ar="المهام اليومية">Daily Missions</div>
+          <div class="daily-count">1/4 Complete</div>
+        </div>
+      </div>
+
+      <p class="section-header" data-en="GAME MODES" data-ar="أوضاع اللعب">GAME MODES</p>
+      <div class="dash-grid">
+        <div class="mission-card" onclick="showScreen('classify')"><div class="mc-icon">🗂️</div><div class="mc-title" data-en="Data Classification" data-ar="تصنيف البيانات">Data Classification</div><div class="mc-sub" data-en="Classify UAE data types" data-ar="صنف أنواع البيانات">Classify UAE data types</div><span class="mc-badge badge-easy" data-en="Beginner" data-ar="مبتدئ">Beginner</span></div>
+        <div class="mission-card" onclick="showScreen('scenario')"><div class="mc-icon">⚔️</div><div class="mc-title" data-en="Real-Life Scenarios" data-ar="سيناريوهات حقيقية">Real-Life Scenarios</div><div class="mc-sub" data-en="Make critical decisions" data-ar="اتخذ قرارات حاسمة">Make critical decisions</div><span class="mc-badge badge-medium" data-en="Intermediate" data-ar="متوسط">Intermediate</span></div>
+        <div class="mission-card" onclick="showScreen('ai')"><div class="mc-icon">🤖</div><div class="mc-title" data-en="AI Awareness" data-ar="الوعي بالذكاء الاصطناعي">AI Awareness</div><div class="mc-sub" data-en="Responsible AI &amp; ethics" data-ar="الذكاء الاصطناعي المسؤول">Responsible AI &amp; ethics</div><span class="mc-badge badge-medium" data-en="Intermediate" data-ar="متوسط">Intermediate</span></div>
+        <div class="mission-card" onclick="showScreen('quality')"><div class="mc-icon">🔧</div><div class="mc-title" data-en="Data Quality Fix" data-ar="إصلاح جودة البيانات">Data Quality Fix</div><div class="mc-sub" data-en="Fix broken dashboards" data-ar="إصلاح لوحات البيانات">Fix broken dashboards</div><span class="mc-badge badge-medium" data-en="Intermediate" data-ar="متوسط">Intermediate</span></div>
+        <div class="mission-card" onclick="showScreen('boss')"><div class="mc-icon">💀</div><div class="mc-title" data-en="Boss Battle" data-ar="معركة الزعيم">Boss Battle</div><div class="mc-sub" data-en="Stop the data breach" data-ar="أوقف اختراق البيانات">Stop the data breach</div><span class="mc-badge badge-boss" data-en="CRITICAL" data-ar="حرج">CRITICAL</span></div>
+        <div class="mission-card" onclick="showScreen('leaderboard')"><div class="mc-icon">🏆</div><div class="mc-title" data-en="Leaderboard" data-ar="لوحة المتصدرين">Leaderboard</div><div class="mc-sub" data-en="UAE universities ranking" data-ar="تصنيف الجامعات">UAE universities ranking</div><span class="mc-badge badge-easy" data-en="Rankings" data-ar="تصنيفات">Rankings</span></div>
+      </div>
+
+      <p class="section-header" data-en="YOUR PROGRESS" data-ar="تقدمك">YOUR PROGRESS</p>
+      <div class="progress-panel">
+        <div class="progress-stats">
+          <div style="text-align:center"><div class="big-stat blue" id="stat-questions">0</div><div class="big-stat-label" data-en="Answered" data-ar="مجابة">Answered</div></div>
+          <div style="text-align:center"><div class="big-stat gold" id="stat-accuracy">0%</div><div class="big-stat-label" data-en="Accuracy" data-ar="دقة">Accuracy</div></div>
+          <div style="text-align:center"><div class="big-stat green" id="stat-missions">0</div><div class="big-stat-label" data-en="Missions" data-ar="مهام">Missions</div></div>
+        </div>
+        <div class="xp-row"><span data-en="Level Progress" data-ar="تقدم المستوى">Level Progress</span><span id="xp-pct">0 / 200 XP</span></div>
+        <div class="xp-bar"><div class="xp-fill" id="main-xp-bar" style="width:0%"></div></div>
+      </div>
+
+      <p class="section-header" data-en="ACHIEVEMENTS" data-ar="الإنجازات">ACHIEVEMENTS</p>
+      <div class="achievements-grid">
+        <div class="ach-card unlocked"><div class="ach-icon">🚀</div><div class="ach-name" data-en="First Mission" data-ar="أول مهمة">First Mission</div><div class="ach-desc" data-en="Start your journey" data-ar="ابدأ رحلتك">Start your journey</div></div>
+        <div class="ach-card locked"><div class="ach-icon">🏅</div><div class="ach-name" data-en="Data Expert" data-ar="خبير البيانات">Data Expert</div><div class="ach-desc" data-en="Answer 50 correctly" data-ar="50 إجابة صحيحة">Answer 50 correctly</div></div>
+        <div class="ach-card locked"><div class="ach-icon">🔥</div><div class="ach-name" data-en="On Fire" data-ar="في لهب">On Fire</div><div class="ach-desc" data-en="7-day streak" data-ar="سلسلة 7 أيام">7-day streak</div></div>
+        <div class="ach-card locked"><div class="ach-icon">💎</div><div class="ach-name" data-en="Diamond" data-ar="ماسي">Diamond</div><div class="ach-desc" data-en="Reach Level 10" data-ar="بلوغ المستوى 10">Reach Level 10</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CLASSIFY ===== -->
+  <div id="screen-classify" class="screen">
+    <div class="hud-bar">
+      <button class="back-btn" onclick="showScreen('dashboard')">← <span data-en="Back" data-ar="رجوع">Back</span></button>
+      <span class="game-title">🗂️ Data Classification</span>
+      <div class="timer-display" id="classify-timer">30</div>
+    </div>
+    <div class="screen-content pad">
+      <div class="progress-dots" id="classify-dots"></div>
+      <div class="data-item-card">
+        <div class="data-label" data-en="DATA ITEM" data-ar="عنصر البيانات">DATA ITEM</div>
+        <div class="data-value" id="classify-data-value"></div>
+        <div class="data-context" id="classify-context"></div>
+      </div>
+      <p class="question-prompt" data-en="How should this data be classified?" data-ar="كيف يجب تصنيف هذه البيانات؟">How should this data be classified?</p>
+      <div class="classify-grid">
+        <button class="classify-btn" data-class="public" onclick="checkClassify('public')">🌐 Public</button>
+        <button class="classify-btn" data-class="internal" onclick="checkClassify('internal')">🏢 Internal</button>
+        <button class="classify-btn" data-class="confidential" onclick="checkClassify('confidential')">🔒 Confidential</button>
+        <button class="classify-btn" data-class="restricted" onclick="checkClassify('restricted')">🚫 Restricted</button>
+      </div>
+      <div class="feedback-box" id="classify-feedback"></div>
+      <div class="risk-meter" id="risk-meter" style="display:none">
+        <span class="risk-label" data-en="Risk Level:" data-ar="مستوى المخاطر:">Risk Level:</span>
+        <div class="risk-bar"><div class="risk-fill" id="risk-fill" style="width:0%"></div></div>
+        <span id="risk-pct" class="risk-pct">0%</span>
+      </div>
+      <button class="next-btn" id="classify-next" onclick="nextClassify()">Next Data Item →</button>
+    </div>
+  </div>
+
+  <!-- ===== SCENARIO ===== -->
+  <div id="screen-scenario" class="screen">
+    <div class="hud-bar">
+      <button class="back-btn" onclick="showScreen('dashboard')">← <span data-en="Back" data-ar="رجوع">Back</span></button>
+      <span class="game-title">⚔️ Mission Scenario</span>
+      <div class="timer-display" id="scenario-timer">45</div>
+    </div>
+    <div class="screen-content pad">
+      <div class="progress-dots" id="scenario-dots"></div>
+      <div class="scenario-card">
+        <div class="scenario-title" data-en="INCOMING REQUEST" data-ar="طلب وارد">INCOMING REQUEST</div>
+        <div class="scenario-text" id="scenario-text"></div>
+      </div>
+      <p class="question-prompt" data-en="What is the correct action?" data-ar="ما هو الإجراء الصحيح؟">What is the correct action?</p>
+      <div class="choice-list" id="scenario-choices"></div>
+      <div class="feedback-box" id="scenario-feedback"></div>
+      <div class="impact-meters" id="scenario-impacts" style="display:none">
+        <div class="impact-item"><div class="impact-val" id="imp-compliance">0</div><div class="impact-lbl">Compliance</div></div>
+        <div class="impact-item"><div class="impact-val" id="imp-risk">0</div><div class="impact-lbl">Risk Score</div></div>
+        <div class="impact-item"><div class="impact-val" id="imp-gov">0</div><div class="impact-lbl">Governance</div></div>
+      </div>
+      <button class="next-btn" id="scenario-next" onclick="nextScenario()">Next Scenario →</button>
+    </div>
+  </div>
+
+  <!-- ===== AI AWARENESS ===== -->
+  <div id="screen-ai" class="screen">
+    <div class="hud-bar">
+      <button class="back-btn" onclick="showScreen('dashboard')">← <span data-en="Back" data-ar="رجوع">Back</span></button>
+      <span class="game-title">🤖 AI Awareness</span>
+      <div class="timer-display" id="ai-timer">40</div>
+    </div>
+    <div class="screen-content pad">
+      <div class="progress-dots" id="ai-dots"></div>
+      <div class="ai-question">
+        <div class="ai-q-num" id="ai-q-num">QUESTION 1 / 5</div>
+        <div class="ai-q-text" id="ai-q-text"></div>
+        <div class="ai-options" id="ai-options"></div>
+      </div>
+      <div class="feedback-box" id="ai-feedback"></div>
+      <button class="next-btn" id="ai-next" onclick="nextAI()">Next Question →</button>
+    </div>
+  </div>
+
+  <!-- ===== DATA QUALITY ===== -->
+  <div id="screen-quality" class="screen">
+    <div class="hud-bar">
+      <button class="back-btn" onclick="showScreen('dashboard')">← <span data-en="Back" data-ar="رجوع">Back</span></button>
+      <span class="game-title">🔧 Data Quality Fix</span>
+      <div class="errors-left" id="errors-left">Click errors to fix!</div>
+    </div>
+    <div class="screen-content pad">
+      <div class="broken-dashboard">
+        <div class="bd-header">⚠️ Student Records — Data Quality Issues Detected</div>
+        <div style="overflow-x:auto">
+          <table class="dq-table">
+            <thead><tr><th>Student ID</th><th>Name</th><th>Emirates</th><th>GPA</th><th>Email</th></tr></thead>
+            <tbody id="dq-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="dq-meters">
+        <div class="dq-meter">
+          <div class="dq-meter-label">Data Quality Score</div>
+          <div class="dq-meter-bar"><div class="dq-meter-fill" id="dq-quality-fill" style="width:30%"></div></div>
+          <div class="dq-meter-val"><span id="dq-quality-pct">30</span>%</div>
+        </div>
+        <div class="dq-meter">
+          <div class="dq-meter-label">Trust Score</div>
+          <div class="dq-meter-bar"><div class="dq-meter-fill" id="dq-trust-fill" style="width:45%"></div></div>
+          <div class="dq-meter-val"><span id="dq-trust-pct">45</span>%</div>
+        </div>
+      </div>
+      <p class="question-prompt">Tap red cells to identify and fix errors</p>
+    </div>
+  </div>
+
+  <!-- ===== BOSS BATTLE ===== -->
+  <div id="screen-boss" class="screen">
+    <div class="boss-hud">
+      <div><div class="boss-name" id="boss-name">🦠 Data Breach Boss</div><div class="boss-subtitle" data-en="CRITICAL INCIDENT" data-ar="حادثة حرجة">CRITICAL INCIDENT</div></div>
+      <div class="boss-health">
+        <div class="boss-health-label" data-en="Threat Level" data-ar="مستوى التهديد">Threat Level</div>
+        <div class="boss-bar"><div class="boss-fill" id="boss-hp-fill" style="width:100%"></div></div>
+      </div>
+      <div class="timer-display" id="boss-timer">15</div>
+    </div>
+    <div class="screen-content">
+      <button class="back-btn" style="margin:1rem 1.5rem" onclick="showScreen('dashboard')">← <span data-en="Back" data-ar="رجوع">Back</span></button>
+      <div class="boss-incident">
+        <div class="boss-alert">🚨 CRITICAL ALERT — IMMEDIATE ACTION REQUIRED</div>
+        <div class="boss-text" id="boss-incident-text"></div>
+      </div>
+      <div class="boss-responses" id="boss-responses"></div>
+      <div class="feedback-box" id="boss-feedback" style="margin:0 1.5rem 1rem"></div>
+      <button class="next-btn" id="boss-next" onclick="nextBoss()" style="margin:0 1.5rem;width:calc(100% - 3rem)">Next Incident →</button>
+    </div>
+  </div>
+
+  <!-- ===== LEADERBOARD ===== -->
+  <div id="screen-leaderboard" class="screen">
+    <div class="hud-bar">
+      <button class="back-btn" onclick="showScreen('dashboard')">← <span data-en="Back" data-ar="رجوع">Back</span></button>
+      <span class="game-title">🏆 Leaderboard</span>
+      <div class="hud-sub" data-en="UAE Universities" data-ar="جامعات الإمارات">UAE Universities</div>
+    </div>
+    <div class="screen-content">
+      <div class="lb-tabs">
+        <button class="lb-tab-btn active" onclick="setLBTab(this)">Global</button>
+        <button class="lb-tab-btn" onclick="setLBTab(this)">UAE</button>
+        <button class="lb-tab-btn" onclick="setLBTab(this)">This Week</button>
+      </div>
+      <div class="leaderboard-list" id="lb-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== NAV BAR ===== -->
+  <nav class="nav-bar" id="main-nav" style="display:none">
+    <button class="nav-btn active" onclick="showScreen('dashboard')" id="nav-home"><span>🏠</span><span data-en="Home" data-ar="الرئيسية">Home</span></button>
+    <button class="nav-btn" onclick="showScreen('classify')" id="nav-play"><span>⚡</span><span data-en="Play" data-ar="العب">Play</span></button>
+    <button class="nav-btn" onclick="showScreen('leaderboard')" id="nav-rank"><span>🏆</span><span data-en="Rank" data-ar="الترتيب">Rank</span></button>
+    <button class="nav-btn" onclick="showScreen('dashboard')" id="nav-ach"><span>🎖️</span><span data-en="Awards" data-ar="الجوائز">Awards</span></button>
+  </nav>
+
+  <!-- ===== REWARD POPUP ===== -->
+  <div class="reward-popup" id="reward-popup" onclick="closeReward()">
+    <div class="reward-box" onclick="event.stopPropagation()">
+      <div class="reward-icon" id="reward-icon">🏅</div>
+      <div class="reward-title" id="reward-title">Correct!</div>
+      <div class="reward-xp">+<span id="reward-xp-val" class="xp-gained">50</span> XP</div>
+      <div class="reward-msg" id="reward-msg">Keep going!</div>
+      <button class="cta-btn" onclick="closeReward()">Continue →</button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
