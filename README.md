@@ -1,6 +1,7 @@
 # أبطال البيانات | Data Heroes
 
 > An interactive, bilingual educational game about Data Classification, Privacy, AI Ethics, and Cybersecurity — built for UAE university students.
+> 
 
 ![Data Heroes Banner](https://img.shields.io/badge/UAE-National%20Data%20Academy-blue?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
